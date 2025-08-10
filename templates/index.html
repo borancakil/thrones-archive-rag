@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAG • Thrones Archive</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  <meta name="theme-color" content="#0b0e14" />
+  <script>
+    async function ask(event) {
+      event.preventDefault();
+      const input = document.getElementById('q');
+      const query = input.value.trim();
+      if (!query) return;
+      const btn = document.getElementById('btn');
+      const answerEl = document.getElementById('answer');
+      btn.disabled = true; btn.textContent = 'Dracarys…';
+      answerEl.textContent = '';
+      try {
+        const res = await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'İstek başarısız');
+        // cevap görünür
+        answerEl.textContent = data.answer || '';
+        // konuşma güncelle
+        renderHistory();
+      } catch (e) {
+        alert('Hata: ' + e.message);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Sor';
+      }
+    }
+
+    async function fetchHistory() {
+      const res = await fetch('/history');
+      if (!res.ok) return [];
+      const json = await res.json();
+      return json.history || [];
+    }
+
+    async function resetHistory() {
+      await fetch('/reset', { method: 'POST' });
+      renderHistory();
+    }
+
+    async function renderHistory() {
+      const list = document.getElementById('chat');
+      if (!list) return;
+      list.innerHTML = '';
+      const history = await fetchHistory();
+      for (const msg of history) {
+        if (!msg.content) continue;
+        const item = document.createElement('div');
+        item.className = 'bubble ' + (msg.role === 'user' ? 'user' : 'assistant');
+        item.textContent = msg.content;
+        list.appendChild(item);
+      }
+      list.scrollTop = list.scrollHeight;
+    }
+
+    window.addEventListener('DOMContentLoaded', renderHistory);
+  </script>
+</head>
+<body>
+  <div class="page">
+    <div class="veil"></div>
+    <header class="site-header">
+      <div class="brand">
+        <div class="crest" aria-hidden="true">⚔️</div>
+        <div class="titles">
+          <h1>Thrones Archive</h1>
+          <p>Valar Dohaeris • RAG for the World of Ice and Fire</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <form class="ask" onsubmit="ask(event)">
+        <input id="q" type="text" placeholder="Sözünü fısılda; ejderhalar cevap versin…" autocomplete="off" />
+        <button id="btn" type="submit">Sor</button>
+      </form>
+
+      <section class="panel answerwrap">
+        <h3 class="panel-title">Cevap</h3>
+        <div id="answer" class="panel-body answer"></div>
+      </section>
+
+      <section class="chatwrap panel">
+        <h3 class="panel-title">Sohbet</h3>
+        <div id="chat" class="panel-body chat"></div>
+        <div class="chat-actions">
+          <button type="button" class="btn-reset" onclick="resetHistory()">Geçmişi Temizle</button>
+        </div>
+      </section>
+
+      <footer class="credits">Valar Morghulis • Made for the Realm</footer>
+    </main>
+  </div>
+</body>
+</html>
+
+

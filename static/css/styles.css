@@ -1,0 +1,284 @@
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Cinzel-Bold"), local("Cinzel Bold");
+}
+
+:root {
+  --bg: #0b0e14;
+  /* gece göğü */
+  --bg-soft: #0f131b;
+  --ink: #e6e6e6;
+  /* kış beyazı */
+  --muted: #9aa2b1;
+  /* sis gri */
+  --gold: #c9a227;
+  /* lannister altın */
+  --red: #7a1f1f;
+  /* targaryen kırmızı */
+  --blue: #17324a;
+  /* winterfell mavi */
+  --panel: rgba(15, 19, 27, .75);
+  --border: rgba(255, 255, 255, .08);
+  --blur: saturate(140%) blur(6px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--bg) url('/static/img/got-bg.png') center/cover no-repeat fixed;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+}
+
+.page {
+  position: relative;
+  min-height: 100%;
+}
+
+.veil {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 14, 20, .65), rgba(11, 14, 20, .85));
+  pointer-events: none;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  background: linear-gradient(180deg, rgba(15, 19, 27, .85), rgba(15, 19, 27, .35));
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.crest {
+  font-size: 28px;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .5));
+}
+
+.titles h1 {
+  font: 700 24px/1.1 Cinzel, ui-serif, Georgia, serif;
+  letter-spacing: .08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.titles p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.shell {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 20px 40px;
+  display: grid;
+  gap: 18px;
+}
+
+.ask {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.ask input {
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(10, 13, 18, .88);
+  color: #ff5b5b;
+  /* daha parlak kırmızı */
+  caret-color: #ff7070;
+  text-shadow: 0 0 2px rgba(255, 91, 91, .6);
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+  font: 700 24px/1.25 Cinzel, ui-serif, Georgia, serif;
+  letter-spacing: .02em;
+}
+
+.ask input:focus {
+  box-shadow: 0 0 0 2px rgba(212, 178, 74, .25), 0 0 14px rgba(212, 178, 74, .25), inset 0 0 0 1px rgba(255, 255, 255, .06);
+  border-color: rgba(241, 211, 106, .6);
+}
+
+.ask input::placeholder {
+  color: #d9c27a;
+  opacity: .9;
+}
+
+.ask button {
+  padding: 16px 22px;
+  border-radius: 14px;
+  border: 1px solid #4a3812;
+  background: linear-gradient(180deg, #e6c34d, #cfa733);
+  color: #1b1203;
+  font-weight: 800;
+  letter-spacing: .025em;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 4px 16px rgba(0, 0, 0, .35);
+  transition: transform .06s ease, filter .2s ease, box-shadow .2s ease;
+}
+
+.ask button:hover {
+  filter: brightness(1.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 6px 20px rgba(0, 0, 0, .45);
+}
+
+.ask button:active {
+  transform: translateY(1px);
+}
+
+.ask button:disabled {
+  filter: grayscale(40%) brightness(.9);
+  cursor: progress;
+}
+
+.panel {
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.panel.alt {
+  border-color: rgba(201, 162, 39, .35);
+}
+
+.panel-title {
+  margin: 0;
+  padding: 14px 16px;
+  font: 800 13px/1.1 Cinzel, ui-serif, Georgia, serif;
+  letter-spacing: .2em;
+  color: #f1d36a;
+  background: linear-gradient(180deg, rgba(201, 162, 39, .14), rgba(201, 162, 39, .06));
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+
+.answerwrap .panel-body {
+  font-size: 17px;
+}
+
+.panel-body {
+  padding: 16px;
+}
+
+.answer,
+.ctx {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.answer {
+  border-left: 3px solid var(--gold);
+  background: linear-gradient(180deg, rgba(201, 162, 39, .05), transparent);
+}
+
+.ctx {
+  color: #cdd3df;
+  opacity: .95;
+}
+
+/* Chat */
+.chatwrap {
+  display: grid;
+  backdrop-filter: var(--blur);
+}
+
+.chat {
+  display: grid;
+  gap: 12px;
+  max-height: 420px;
+  overflow: auto;
+  scroll-behavior: smooth;
+  padding-right: 6px;
+}
+
+.bubble {
+  padding: 14px 16px;
+  border-radius: 14px;
+  line-height: 1.65;
+}
+
+.bubble.user {
+  background: rgba(201, 162, 39, .14);
+  border: 1px solid rgba(201, 162, 39, .3);
+}
+
+.bubble.assistant {
+  background: rgba(10, 13, 18, .72);
+  border: 1px solid rgba(255, 255, 255, .06);
+}
+
+.chat .bubble:nth-child(even) {
+  filter: brightness(1.03);
+}
+
+.chat-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.btn-reset {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #3a2c12;
+  background: linear-gradient(180deg, #d6ae2b, #c59a1f);
+  color: #1b1203;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.credits {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+@media (max-width: 720px) {
+  .brand {
+    padding: 12px 16px;
+  }
+
+  .titles h1 {
+    font-size: 18px;
+  }
+
+  .ask {
+    grid-template-columns: 1fr;
+  }
+
+  .ask input {
+    font-size: 18px;
+    padding: 16px;
+  }
+}
