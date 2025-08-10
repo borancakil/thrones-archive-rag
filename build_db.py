@@ -1,6 +1,6 @@
 import os
-import shutil
-from langchain_community.document_loaders import DirectoryLoader
+import glob
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
@@ -16,9 +16,16 @@ def generate_data_store():
         return
 
     print("Chroma database not found. Building now...")
-    
-    loader = DirectoryLoader(DATA_PATH, glob="*.md")
-    documents = loader.load()
+
+    # Hafif loader: 'unstructured' bağımlılığını tetiklememek için md dosyalarını düz metin olarak yükle
+    documents: list[Document] = []
+    for path in glob.glob(os.path.join(DATA_PATH, "*.md")):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                text = f.read()
+            documents.append(Document(page_content=text, metadata={"source": os.path.basename(path)}))
+        except Exception as e:
+            print(f"Warn: could not read {path}: {e}")
     print(f"✅ Loaded {len(documents)} documents.")
 
     text_splitter = RecursiveCharacterTextSplitter(
