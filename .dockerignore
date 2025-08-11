@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.env
+chroma/
+node_modules/
+*.log
+
